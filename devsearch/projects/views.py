@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
+from .models import Project
 
 def projects(request):
-    page = 'projects'
-    number = 11
-    context = {'page' : page, 'number' : number}
+    projectsObj = Project.objects.all()
+    context = {'projects' : projectsObj}
     return render(request, 'projects/projects.html', context)
 
 def project(request, pk):
-    return render(request, 'projects/single-project.html')
+    projectObj = Project.objects.get(id=pk)
+    return render(request, 'projects/single-project.html', {'project' : projectObj})
 
