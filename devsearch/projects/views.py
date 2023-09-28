@@ -3,10 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .models import Project
 from .forms import ProjectForm
+from .utils import searchProjects
 
 def projects(request):
-    projectsObj = Project.objects.all()
-    context = {'projects' : projectsObj}
+    projectsObj, search_query = searchProjects(request)
+    context = {'projects' : projectsObj,'search_query':search_query}
     return render(request, 'projects/projects.html', context)
 
 def project(request, pk):
@@ -23,7 +24,7 @@ def createProject(request):
             project = form.save(commit = False)
             project.owner = profile
             project.save()
-            return redirect('projects')
+            return redirect('account')
     context = {'form' : form}
     return render(request, 'projects/project_form.html', context)
 
@@ -36,7 +37,7 @@ def updateProject(request,pk):
         form = ProjectForm(request.POST, request.FILES, instance = project)
         if form.is_valid():
             form.save()
-            return redirect('projects')
+            return redirect('account')
     context = {'form' : form}
     return render(request, 'projects/project_form.html', context)
 
@@ -48,4 +49,4 @@ def deleteProject(request, pk):
         project.delete()
         return redirect('projects')
     context = {'object' : project}
-    return render(request, 'projects/delete_template.html', context)
+    return render(request, 'delete_template.html', context)
