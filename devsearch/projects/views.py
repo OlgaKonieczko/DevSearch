@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .models import Project
 from .forms import ProjectForm
-from .utils import searchProjects
+from .utils import searchProjects, paginateProjects
 
 def projects(request):
     projectsObj, search_query = searchProjects(request)
-    context = {'projects' : projectsObj,'search_query':search_query}
+    custom_range, projectsObj = paginateProjects(request, projectsObj, 3)
+    context = {'projects' : projectsObj,'search_query':search_query,'custom_range':custom_range}
     return render(request, 'projects/projects.html', context)
 
 def project(request, pk):
