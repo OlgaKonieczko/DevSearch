@@ -3,18 +3,19 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .models import Project
-from .forms import ProjectForm
+from .forms import ProjectForm, ReviewForm
 from .utils import searchProjects, paginateProjects
 
 def projects(request):
     projectsObj, search_query = searchProjects(request)
-    custom_range, projectsObj = paginateProjects(request, projectsObj, 3)
+    custom_range, projectsObj = paginateProjects(request, projectsObj, 6)
     context = {'projects' : projectsObj,'search_query':search_query,'custom_range':custom_range}
     return render(request, 'projects/projects.html', context)
 
 def project(request, pk):
     projectObj = Project.objects.get(id=pk)
-    return render(request, 'projects/single-project.html', {'project' : projectObj})
+    form = ReviewForm()
+    return render(request, 'projects/single-project.html', {'project' : projectObj, 'form':form})
 
 @login_required(login_url="login")
 def createProject(request):

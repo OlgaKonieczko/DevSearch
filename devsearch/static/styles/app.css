@@ -688,7 +688,7 @@ img {
   margin-bottom: 2rem;
 }
 
-.auth__form {
+ .auth__form {
   margin: 3rem 0;
 }
 
@@ -697,7 +697,7 @@ img {
   font-size: 1.4rem;
   font-weight: 500;
   color: var(--color-sub-light);
-}
+} 
 
 .auth .auth__actions {
   display: flex;
